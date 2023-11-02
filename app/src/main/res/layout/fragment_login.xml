@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragments.LoginFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="16dp"
+            >
+            <TextView
+                android:id="@+id/welcome_emojie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🤚"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/welcome_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Добро пожаловать!"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:fontFamily="@font/sf_pro_display_heavy"
+                android:textColor="@color/black"
+                android:layout_marginStart="8dp"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Войдите, чтобы пользоваться функциями приложения"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            android:paddingEnd="30dp"
+            app:layout_constraintStart_toStartOf="@id/welcome_emojie"
+            app:layout_constraintTop_toBottomOf="@id/welcome_emojie"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="16dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/text1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text1"
+            android:layout_marginTop="64dp"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вход по E-mail"
+                android:textColor="@color/Description"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_gravity="left"
+                />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="example@mail.ru"
+                android:textColor="@color/black"
+                android:background="@drawable/et_style_default"
+                android:paddingStart="10dp"
+                android:textColorHint="@color/black_50"
+                android:fontFamily="@font/sf_pro_display_regular"
+                android:layout_marginTop="5dp"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/continue_btn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_selector_style"
+                android:text="Далее"
+                android:textSize="17sp"
+                android:textColor="@color/white"
+                style="?android:attr/borderlessButtonStyle"
+                android:textAllCaps="false"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginHorizontal="16dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Или войдите с помощью"
+            android:textColor="@color/Caption"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="10dp"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/continue_yandex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Войти с Яндекс"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:background="@drawable/login_button_yandex_style"
+
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="false"
+            />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

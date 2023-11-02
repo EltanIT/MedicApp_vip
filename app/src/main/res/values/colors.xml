@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="blue_main">#57A9FF</color>
+    <color name="Caption">#939396</color>
+    <color name="Description">#7E7E9A</color>
+    <color name="Input_BG">#F5F5F9</color>
+    <color name="Input_Stroke">#EBEBEB</color>
+    <color name="Caption_low">#AEAEB1</color>
+
+    <color name="accent_inactive">#C9D4FB</color>
+    <color name="accent">#1A6FEE</color>
+</resources>
