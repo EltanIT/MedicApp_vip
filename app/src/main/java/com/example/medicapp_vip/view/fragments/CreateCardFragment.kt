@@ -17,17 +17,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.medicapp_vip.databinding.FragmentCreateCardBinding
-import com.example.medicapp_vip.db.repository.PostCodeRepository
 import com.example.medicapp_vip.db.repository.PostProfileRepository
 import com.example.medicapp_vip.objects.Profile
-import com.example.medicapp_vip.view.activity.LoginActivity
 import com.example.medicapp_vip.view.activity.MainScreenActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CreateCardFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateCardBinding
-    private var floor = 0
-    private val floorList = ArrayList<String>()
+    private var gender = 0
+    private val genderList = ArrayList<String>()
 
     private lateinit var vm: CreateCardViewModel
 
@@ -43,20 +44,25 @@ class CreateCardFragment : Fragment() {
     }
 
     private fun addFloor(){
-        floorList.add("Пол")
-        floorList.add("Мужской")
-        floorList.add("Женский")
+        genderList.add("Пол")
+        genderList.add("Мужской")
+        genderList.add("Женский")
     }
 
     private fun setting() {
         vm.result.observe(viewLifecycleOwner) {
             if (it){
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(com.example.medicapp_vip.R.id.login_main_view, CreatePasswordFragment())
-                    .commit()
+                val intent = Intent(requireActivity(), MainScreenActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
             else{
                 Toast.makeText(context, "Ошибка, попробуйте позже", Toast.LENGTH_SHORT).show()
+                //////
+                val intent = Intent(requireActivity(), MainScreenActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                //////
             }
         }
 
@@ -114,9 +120,7 @@ class CreateCardFragment : Fragment() {
         })
 
         binding.continueBtn.setOnClickListener{
-            val intent = Intent(requireActivity(), MainScreenActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            vm.postCode(binding.etName.text.toString(), binding.etLastname.text.toString(), binding.etMiddlename.text.toString(), binding.etBirthday.text.toString(), gender)
         }
         binding.miss.setOnClickListener{
             val intent = Intent(requireActivity(), MainScreenActivity::class.java)
@@ -128,7 +132,7 @@ class CreateCardFragment : Fragment() {
             AdapterView.OnItemClickListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (p2 != 0){
-                    floor = p2
+                    gender = p2
                 }
 
             }
@@ -144,7 +148,7 @@ class CreateCardFragment : Fragment() {
         }
 
 
-        binding.floorS.adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, floorList)
+        binding.floorS.adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, genderList)
     }
 
 }
@@ -155,8 +159,15 @@ class CreateCardViewModel: ViewModel(){
 
     val result = MutableLiveData<Boolean>()
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
     fun postCode (name: String, lastName: String, patronymic: String, dob: String, gender: Int){
-        result.value = postProfileRepository.request(Profile(name, lastName, patronymic, dob, gender))
+        coroutineScope.launch {
+            result.postValue(postProfileRepository.request(Profile(name, lastName, patronymic, dob, gender)))
+        }
+
     }
+
+
 }
 

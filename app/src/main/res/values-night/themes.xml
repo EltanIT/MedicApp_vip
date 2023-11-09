@@ -5,4 +5,8 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/white</item>
     </style>
+
+    <style name="SaveAddressSwitch" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorControlActivated">@color/accent</item>
+    </style>
 </resources>

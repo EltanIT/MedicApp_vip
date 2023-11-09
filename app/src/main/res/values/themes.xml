@@ -7,4 +7,8 @@
     </style>
 
     <style name="Theme.MedicApp_vip" parent="Base.Theme.MedicApp_vip" />
+
+    <style name="SaveAddressSwitch" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorControlActivated">@color/accent</item>
+    </style>
 </resources>

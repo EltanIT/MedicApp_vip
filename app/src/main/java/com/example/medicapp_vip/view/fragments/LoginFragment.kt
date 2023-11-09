@@ -15,6 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.medicapp_vip.R
 import com.example.medicapp_vip.databinding.FragmentLoginBinding
 import com.example.medicapp_vip.db.repository.PostEmailRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -42,6 +45,17 @@ class LoginFragment : Fragment() {
             }
             else{
                 Toast.makeText(context, "Ошибка, попробуйте позже", Toast.LENGTH_SHORT).show()
+                /////
+                val bundle = Bundle()
+                bundle.putString("email", binding.email.text.toString())
+                val ieFragment = IdentificationEmailFragment()
+                ieFragment.arguments = bundle
+
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.login_main_view, ieFragment, "identificationEmail")
+                    .addToBackStack("identificationEmail")
+                    .commit()
+                //////
             }
         }
         setting()
@@ -81,7 +95,12 @@ class LoginViewModel: ViewModel(){
 
     val result = MutableLiveData<Boolean>()
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
     fun postEmail (email: String){
-       result.value = postEmailRepository.request(email)
+        coroutineScope.launch {
+            result.postValue(postEmailRepository.request(email))
+        }
+
     }
 }

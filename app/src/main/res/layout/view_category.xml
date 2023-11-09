@@ -9,11 +9,13 @@
     android:text="Популярные"
     android:textSize="15sp"
     android:fontFamily="@font/sf_pro_display_medium"
-    android:textColor="#7E7E9A"
+    android:textColor="@color/category_txt_color"
     android:paddingHorizontal="26dp"
     android:paddingVertical="15dp"
     android:textAllCaps="false"
     style="@style/Widget.AppCompat.Button.Borderless"
+
+    android:id="@+id/category_btn"
     >
 
 </androidx.appcompat.widget.AppCompatButton>

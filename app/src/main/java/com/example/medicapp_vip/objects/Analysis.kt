@@ -1,4 +1,6 @@
 package com.example.medicapp_vip.objects
 
-class Analysis(var name: String, var description: String, var price: String) {
+import java.util.Currency
+
+class Analysis(var title: String, var description: String, var processDescription: String, var deadline: String, var material: String, var price: Int, var currency: String) {
 }

@@ -10,6 +10,10 @@ class GetShoppingCard {
     fun request(context: Context): String?{
         sharedPreferences = context.getSharedPreferences("ShoppingCard", Context.MODE_PRIVATE)
 
+//        val editor = sharedPreferences.edit()
+//        editor.remove("card")
+//        editor.apply()
+
         return sharedPreferences.getString("card", null)
     }
 }

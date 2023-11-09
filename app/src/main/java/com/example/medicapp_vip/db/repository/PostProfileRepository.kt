@@ -15,16 +15,16 @@ class PostProfileRepository {
     private val url = URLs().postProfileUrl
     private val mediaType = "application/json; charset=utf-8".toMediaType()
 
-    fun request(profile: Profile): Boolean{
+    fun request(profile: Profile?, token: String): Boolean{
         val client = OkHttpClient()
         val gson = Gson()
 
         val dataMap = mapOf(
-            "firstName" to profile.firstName,
-            "lastName" to profile.lastName,
-            "patronymic" to profile.patronymic,
-            "dob" to profile.dob,
-            "gender" to profile.gender)
+            "firstName" to profile?.firstName,
+            "lastName" to profile?.lastName,
+            "patronymic" to profile?.patronymic,
+            "dob" to profile?.dob,
+            "gender" to profile?.gender)
         val data = gson.toJson(dataMap)
 
         val requestBody = data.toRequestBody(mediaType)
@@ -32,6 +32,7 @@ class PostProfileRepository {
         val request = Request.Builder()
             .url(url)
             .post(requestBody)
+            .header("Authorization", token)
             .build()
 
         try {

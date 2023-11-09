@@ -3,7 +3,7 @@ package com.example.medicapp_vip.config
 import java.net.URL
 
 class URLs {
-    private val mainUrl = "http://192.168.144.66:8080/api/"
+    private val mainUrl = "https://192.168.144.66:8080/api/"
 
     //Analysis
     val getAnalysisUrl = URL(mainUrl+"catalog")
@@ -20,6 +20,8 @@ class URLs {
     //Order
     val postOrderUrl = URL(mainUrl+"order")
     val getOrdersUrl = URL(mainUrl+"orders")
+    val getOrderOnIdUrl = URL(mainUrl+"order/")
+    val postOrderRecordUrl = URL(mainUrl+"order/")
 
 
     //Profile

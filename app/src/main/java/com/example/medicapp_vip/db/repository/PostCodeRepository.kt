@@ -14,7 +14,7 @@ class PostCodeRepository {
     private val url = URLs().postCodeUrl
     private val mediaType = "application/json; charset=utf-8".toMediaType()
 
-    fun request(email: String, code: String): Boolean{
+    fun request(email: String, code: String): String?{
         val client = OkHttpClient()
         val gson = Gson()
 
@@ -31,10 +31,14 @@ class PostCodeRepository {
 
         try {
             client.newCall(request).execute().use { response ->
-                return response.isSuccessful
+                if (response.isSuccessful){
+                    return response.body?.string()
+                }
+                return null
+
             }
         }catch (e: Exception){
-            return false
+            return null
         }
 
     }

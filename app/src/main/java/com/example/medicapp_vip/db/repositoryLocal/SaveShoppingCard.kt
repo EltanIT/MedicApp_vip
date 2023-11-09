@@ -2,6 +2,7 @@ package com.example.medicapp_vip.db.repositoryLocal
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 class SaveShoppingCard {
 
@@ -17,6 +18,7 @@ class SaveShoppingCard {
             editor.apply()
             true
         }catch (e: Exception){
+            Log.i("shoppingCard", e.toString())
             false
         }
 

@@ -1,11 +1,11 @@
 package com.example.medicapp_vip.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.medicapp_vip.R
 import com.example.medicapp_vip.databinding.ActivityMainScreenBinding
@@ -66,6 +66,7 @@ class MainScreenActivity : AppCompatActivity() {
                         else{
                             addFragment(profileFragment)
                             selectFragment(profileFragment)
+                            activeFragment = profileFragment
                             profileAddState = true
                         }
 
@@ -76,5 +77,15 @@ class MainScreenActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onBackPressed() {
+        val fragment =supportFragmentManager.findFragmentByTag("payment")
+
+        super.onBackPressed()
+    }
+
+    interface BackPressedListener{
+        fun onBackPressed(): Boolean
     }
 }

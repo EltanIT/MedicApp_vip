@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragments.SelecteAddressFragment"
+    android:id="@+id/background_view"
+    android:background="@color/black_50"
+    >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/address_card_view"
+            android:background="@drawable/view_card_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <ImageButton
+                android:id="@+id/close_address_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/map_ic"
+                android:background="@color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                />
+
+            <TextView
+                android:id="@+id/text1_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/close_address_view"
+                android:layout_marginEnd="32dp"
+
+                android:text="Адрес сдачи анализов"
+                android:maxLines="3"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/address_ll_view"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text1_view"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ваш адрес"
+                    android:textColor="@color/Caption"
+                    android:layout_marginBottom="8dp"
+                    />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/address_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:hint="Укажите адрес"
+                    android:textColor="@color/black"
+                    android:background="@drawable/et_style_default"
+                    android:padding="12dp"
+
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/group1_ll"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_ll_view"
+                android:layout_marginHorizontal="16dp"
+                >
+                <LinearLayout
+                    android:id="@+id/longitude_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text1_view"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Долгота"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/longitude_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:hint=""
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:padding="12dp"
+                        android:inputType="number"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/width_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text1_view"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Широта"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/width_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:hint=""
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:padding="12dp"
+                        android:inputType="number"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/height_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Высота"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/height_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:inputType="number"
+                        android:padding="12dp"
+
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/group2_ll"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/group1_ll"
+                android:layout_marginHorizontal="16dp"
+                >
+                <LinearLayout
+                    android:id="@+id/flat_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text1_view"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Квартира"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/flat_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:hint=""
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:padding="12dp"
+                        android:inputType="number"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/entrance_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text1_view"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Подъезд"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/entrance_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:hint=""
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:padding="12dp"
+                        android:inputType="number"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/floor_ll"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Этаж"
+                        android:textColor="@color/Caption"
+                        android:layout_marginBottom="8dp"
+                        />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/floor_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:hint=""
+                        android:textColor="@color/black"
+                        android:background="@drawable/et_style_default"
+                        android:backgroundTint="@color/Input_Stroke"
+                        android:padding="12dp"
+                        android:inputType="number"
+
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/intercom_ll_view"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/group2_ll"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Домофон"
+                    android:textColor="@color/Caption"
+                    android:layout_marginBottom="8dp"
+                    />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/intercom_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/et_style_default"
+                    android:backgroundTint="@color/Input_Stroke"
+                    android:padding="12dp"
+                    android:inputType="number"
+
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сохранить этот адрес?"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/intercom_ll_view"
+                android:layout_marginStart="16dp"
+
+                />
+            <Switch
+                android:id="@+id/save_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/intercom_ll_view"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/SaveAddressSwitch"
+                android:scaleY="1.5"
+
+                />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/place_live_et"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Название: например дом, работа"
+                android:textColor="@color/black"
+                android:background="@drawable/et_style_default"
+                android:backgroundTint="@color/Input_Stroke"
+                android:padding="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text4"
+                android:layout_marginTop="22dp"
+                android:layout_marginHorizontal="16dp"
+                android:visibility="gone"
+
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/address_continue_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_selector_style"
+                android:text="Продолжить"
+                android:textSize="17sp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/place_live_et"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginHorizontal="16dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:textAllCaps="false"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
