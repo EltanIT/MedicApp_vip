@@ -14,7 +14,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun selectFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.login_main_view, LoginFragment())
+            .replace(R.id.login_main_view, LoginFragment(), "login")
             .commit()
+    }
+
+    override fun onBackPressed() {
+        val fragmentCreatePassword = supportFragmentManager.findFragmentByTag("createPassword")
+        val fragmentLogin = supportFragmentManager.findFragmentByTag("login")
+        if (fragmentCreatePassword?.isVisible != true){
+            if (fragmentLogin?.isVisible != true){
+                super.onBackPressed()
+            }
+        }
+
     }
 }

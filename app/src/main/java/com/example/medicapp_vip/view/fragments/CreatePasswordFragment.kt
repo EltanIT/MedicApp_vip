@@ -26,7 +26,7 @@ class CreatePasswordFragment : Fragment() {
     private fun setting() {
         binding.missFragment.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.login_main_view, CreateCardFragment())
+                .replace(R.id.login_main_view, CreateCardFragment(), "createCard")
                 .addToBackStack("createCard")
                 .commit()
         }
