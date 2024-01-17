@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -54,12 +56,19 @@ class SelecteAddressFragment(val listener: PlaceOnOrderFragment.AddressListener)
                 binding.floorEt.text.toString().toInt(),
                 binding.intercomEt.text.toString(),
                 binding.placeLiveEt.text.toString())
-                vm.saveAddress(address)
                 listener.execute(address)
                 closeView()
             }
             else{
                 closeView()
+            }
+        }
+
+        binding.saveSwitch.setOnCheckedChangeListener { compoundButton, b ->
+            if (b) {
+                binding.buildingTypeEt.visibility = VISIBLE
+            }else{
+                binding.buildingTypeEt.visibility = GONE
             }
         }
 
@@ -91,7 +100,7 @@ class SelecteAddressFragment(val listener: PlaceOnOrderFragment.AddressListener)
                 binding.widthEt.setText(it.width.toString())
                 binding.longitudeEt.setText(it.longitude.toString())
                 binding.placeLiveEt.setText(it.buildingType)
-
+                binding.intercomEt.setText(it.intercon)
                 binding.saveSwitch.isChecked = true
             }
 
@@ -120,20 +129,15 @@ class SelecteAddressFragment(val listener: PlaceOnOrderFragment.AddressListener)
         })
         binding.addressCardView.startAnimation(animation)
     }
-
 }
 
 
-class SelectedAddressViewModel(_context: Context): ViewModel() {
-    val context = _context
-
+class SelectedAddressViewModel(val context: Context): ViewModel() {
     val address = MutableLiveData<Address>()
 
     private val getAddress = GetAddress()
-    private val saveAddress = SaveAddress()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
 
     fun getAddress(){
         coroutineScope.launch {
@@ -148,24 +152,12 @@ class SelectedAddressViewModel(_context: Context): ViewModel() {
             }
             Log.i("address", address.value.toString())
         }
-
-    }
-
-    fun saveAddress(address: Address){
-        coroutineScope.launch {
-            val gson = Gson()
-            Log.i("address", address.toString())
-            saveAddress.request(context = context, gson.toJson(address))
-        }
     }
 
 }
 
-class SelectedAddressViewModelFabric(_context: Context): ViewModelProvider.Factory{
-    val context = _context
+class SelectedAddressViewModelFabric(val context: Context): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SelectedAddressViewModel(_context = context) as T
+        return SelectedAddressViewModel(context = context) as T
     }
-
-
 }

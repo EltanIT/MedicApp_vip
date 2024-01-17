@@ -63,17 +63,20 @@ class ShoppingCardFragment(val listener: AnalysisFragment.ShoppingCardAnalysisLi
                 redactPrice(analysis.price, false)
             }
 
-            fun redactPrice(price: Int, state: Boolean){
-                var priceNow = binding.priceView.text.toString().toInt()
+            fun redactPrice(price: Int?, state: Boolean?){
+                if (price!=null && state!=null){
+                    var priceNow = binding.priceView.text.toString().toInt()
 
-                if (state){
-                    priceNow += price
-                }
-                else{
-                    priceNow -= price
+                    if (state){
+                        priceNow += price
+                    }
+                    else{
+                        priceNow -= price
+                    }
+
+                    binding.priceView.text = priceNow.toString()
                 }
 
-                binding.priceView.text = priceNow.toString()
             }
 
         }
@@ -91,7 +94,7 @@ class ShoppingCardFragment(val listener: AnalysisFragment.ShoppingCardAnalysisLi
                 binding.cartRv.adapter = adapter
                 var priceNow = 0
                 for(i in it){
-                    priceNow += i.price
+                    priceNow += i.price!!
                 }
                 binding.priceView.text = priceNow.toString()
             }
@@ -117,6 +120,8 @@ class ShoppingCardFragment(val listener: AnalysisFragment.ShoppingCardAnalysisLi
                 .addToBackStack("placeOnOrder")
                 .commit()
         }
+
+        binding.viewBg.setOnClickListener {}
     }
 
     interface ShoppingCardClickListener{
@@ -128,13 +133,11 @@ class ShoppingCardFragment(val listener: AnalysisFragment.ShoppingCardAnalysisLi
 }
 
 
-class ShoppingCardViewModel(_context: Context): ViewModel() {
-    val context = _context
+class ShoppingCardViewModel(val context: Context): ViewModel() {
 
     val shoppingCard = MutableLiveData<ArrayList<Analysis>>()
 
     private val getShoppingCard = GetShoppingCard()
-    private val saveShoppingCard = SaveShoppingCard()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -144,8 +147,9 @@ class ShoppingCardViewModel(_context: Context): ViewModel() {
             val body = getShoppingCard.request(context = context)
             val gson = Gson()
             if (body!= null){
-                val type = object: TypeToken<List<Analysis>>() {}.type
-                shoppingCard.postValue(gson.fromJson<ArrayList<Analysis>>(body, type))
+                val type = object: TypeToken<ArrayList<Analysis>>() {}.type
+                val list = gson.fromJson<ArrayList<Analysis>>(body, type)
+                shoppingCard.postValue(list)
             }
             else{
                 val list = ArrayList<Analysis>()
@@ -157,20 +161,10 @@ class ShoppingCardViewModel(_context: Context): ViewModel() {
 
     }
 
-    fun saveShoppingCard(){
-        coroutineScope.launch {
-            val gson = Gson()
-            val type = object: TypeToken<List<Analysis>>() {}.type
-            Log.i("shoppingCard", shoppingCard.value.toString())
-            saveShoppingCard.request(context = context, gson.toJson(shoppingCard.value, type))
-        }
-    }
-
 
     fun deleteItemFromShoppingCard(analysis: Analysis){
         coroutineScope.launch {
             shoppingCard.value?.remove(analysis)
-            saveShoppingCard()
             if (shoppingCard.value?.size == 0){
                 val list = ArrayList<Analysis>()
                 shoppingCard.postValue(list)
@@ -181,7 +175,6 @@ class ShoppingCardViewModel(_context: Context): ViewModel() {
     fun clearShoppingCard(){
         coroutineScope.launch {
             shoppingCard.value?.clear()
-            saveShoppingCard()
             if (shoppingCard.value?.size == 0){
                 val list = ArrayList<Analysis>()
                 shoppingCard.postValue(list)
@@ -190,11 +183,8 @@ class ShoppingCardViewModel(_context: Context): ViewModel() {
     }
 }
 
-class ShoppingCardViewModelFabric(_context: Context): ViewModelProvider.Factory{
-    val context = _context
+class ShoppingCardViewModelFabric(val context: Context): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ShoppingCardViewModel(_context = context) as T
+        return ShoppingCardViewModel(context) as T
     }
-
-
 }

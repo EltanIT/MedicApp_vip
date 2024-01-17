@@ -18,8 +18,9 @@ import com.example.medicapp_vip.databinding.ViewSelectedPatientsBinding
 import com.example.medicapp_vip.objects.Analysis
 import com.example.medicapp_vip.objects.Profile
 import com.example.medicapp_vip.view.fragments.AnalysisFragment
+import com.example.medicapp_vip.view.fragments.PlaceOnOrderFragment
 
-class OrderProfilesAnalysisAdapter(var analysisList: ArrayList<Analysis>): RecyclerView.Adapter<OrderProfilesAnalysisAdapter.ViewHolder>() {
+class OrderProfilesAnalysisAdapter(var analysisList: ArrayList<Analysis>, val listener: PlaceOnOrderFragment.OrderProfilesListeners): RecyclerView.Adapter<OrderProfilesAnalysisAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = ViewSelectedAnalysisBinding.bind(itemView)
         val resources = itemView.resources
@@ -40,6 +41,21 @@ class OrderProfilesAnalysisAdapter(var analysisList: ArrayList<Analysis>): Recyc
 
         holder.binding.name.text = analysis.title
         holder.binding.priceView.text = "${analysis.price} ₽"
+
+        holder.binding.analysisView.setOnClickListener {
+            holder.binding.checkedAnalysis.isChecked = !holder.binding.checkedAnalysis.isChecked
+        }
+
+        holder.binding.checkedAnalysis.setOnCheckedChangeListener { compoundButton, b ->
+            if (!b){
+                holder.binding.name.setTextColor(holder.resources.getColor(R.color.Caption))
+                holder.binding.priceView.setTextColor(holder.resources.getColor(R.color.Caption))
+            }else{
+                holder.binding.name.setTextColor(holder.resources.getColor(R.color.black))
+                holder.binding.priceView.setTextColor(holder.resources.getColor(R.color.black))
+            }
+            listener.checkAnalysis(analysis, holder.binding.checkedAnalysis.isChecked)
+        }
 
 
 

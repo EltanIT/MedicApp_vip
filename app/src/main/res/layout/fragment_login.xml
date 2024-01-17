@@ -72,15 +72,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Вход по E-mail"
-                android:textColor="@color/Description"
-                android:textSize="16sp"
+                android:textColor="#FF7E7E9A"
+                android:textSize="14sp"
+                android:lineHeight="20sp"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_gravity="left"
                 />
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="48dp"
                 android:hint="example@mail.ru"
                 android:textColor="@color/black"
                 android:background="@drawable/et_style_default"
@@ -116,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Или войдите с помощью"
-            android:textColor="@color/Caption"
+            android:textColor="#FF939396"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="10dp"
@@ -126,14 +127,12 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/continue_yandex"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Войти с Яндекс"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-
             android:background="@drawable/login_button_yandex_style"
-
             style="?android:attr/borderlessButtonStyle"
             android:textAllCaps="false"
             />

@@ -7,17 +7,19 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.lang.Exception
+import java.net.URL
 
 class GetProfileIconRepository {
 
-    private val url = URLs().getProfileUrl
+    private var urlText = URLs().getProfileImageUrl
 
     fun request(name: String): String?{
         val client = OkHttpClient()
+        val url = URL(urlText+name)
 
         val request = Request.Builder()
             .url(url)
-            .header("filename", name)
+            .get()
             .build()
 
         try {

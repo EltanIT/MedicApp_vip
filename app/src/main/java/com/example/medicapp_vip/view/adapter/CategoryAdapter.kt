@@ -1,26 +1,14 @@
 package com.example.medicapp_vip.view.adapter
 
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicapp_vip.R
-import com.example.medicapp_vip.databinding.ViewAnalysisBinding
 import com.example.medicapp_vip.databinding.ViewCategoryBinding
-import com.example.medicapp_vip.databinding.ViewNewBinding
-import com.example.medicapp_vip.objects.Analysis
-import com.example.medicapp_vip.objects.News
-import com.example.medicapp_vip.view.fragments.AnalysisFragment
-import java.util.Base64
 
 class CategoryAdapter(private val categoryList: ArrayList<String>): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,7 +16,7 @@ class CategoryAdapter(private val categoryList: ArrayList<String>): RecyclerView
         val resources: Resources = itemView.resources
     }
 
-    private var lastPosition = 0
+    private var selectedPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_category, parent, false)
@@ -43,7 +31,7 @@ class CategoryAdapter(private val categoryList: ArrayList<String>): RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category = categoryList[position]
 
-        if (holder.adapterPosition == lastPosition){
+        if (holder.adapterPosition == selectedPosition){
             holder.binding.categoryBtn.isSelected = true
             holder.binding.categoryBtn.setTextColor(holder.resources.getColor(R.color.white))
         }
@@ -55,10 +43,8 @@ class CategoryAdapter(private val categoryList: ArrayList<String>): RecyclerView
         holder.binding.categoryBtn.text = category
 
         holder.binding.categoryBtn.setOnClickListener {
-            lastPosition = holder.adapterPosition
+            selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
         }
     }
-
-
 }

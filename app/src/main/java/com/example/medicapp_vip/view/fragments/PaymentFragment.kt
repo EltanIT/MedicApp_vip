@@ -2,6 +2,7 @@ package com.example.medicapp_vip.view.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,16 +18,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.medicapp_vip.R
 import com.example.medicapp_vip.databinding.FragmentPaymentBinding
+import com.example.medicapp_vip.db.repository.PostOrderRecordRepository
 import com.example.medicapp_vip.db.repository.PostOrderRepository
 import com.example.medicapp_vip.db.repositoryLocal.ClearShoppingCard
 import com.example.medicapp_vip.db.repositoryLocal.GetOrder
+import com.example.medicapp_vip.db.repositoryLocal.GetOrderRecord
+import com.example.medicapp_vip.db.repositoryLocal.GetToken
+import com.example.medicapp_vip.objects.News
 import com.example.medicapp_vip.objects.Order
 import com.example.medicapp_vip.view.activity.MainScreenActivity
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 class PaymentFragment : Fragment(), MainScreenActivity.BackPressedListener {
 
@@ -42,6 +49,7 @@ class PaymentFragment : Fragment(), MainScreenActivity.BackPressedListener {
         vm = ViewModelProvider(this, PaymentViewModelFabric(requireContext()))[PaymentViewModel::class.java]
         setting()
         subscriptions()
+        vm.setting()
         return binding.root
     }
 
@@ -51,13 +59,14 @@ class PaymentFragment : Fragment(), MainScreenActivity.BackPressedListener {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+        binding.backgroundView.setOnClickListener {}
 
         val animation = AnimationUtils.loadAnimation(context, R.anim.load_anim)
         binding.loadIc.startAnimation(animation)
     }
 
     private fun subscriptions() {
-        vm.result.observe(viewLifecycleOwner){
+        vm.stateOrder.observe(viewLifecycleOwner){
             if (it){
                 vm.clearShoppingCard()
                 binding.loadView.visibility = GONE
@@ -65,8 +74,12 @@ class PaymentFragment : Fragment(), MainScreenActivity.BackPressedListener {
 
             }
             else{
-                Toast.makeText(context, "Ошибка подключения", Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.popBackStack()
+//                Toast.makeText(context, "Ошибка подключения", Toast.LENGTH_SHORT).show()
+//                requireActivity().supportFragmentManager.popBackStack()
+
+                vm.clearShoppingCard()
+                binding.loadView.visibility = GONE
+                binding.loadCompleteView.visibility = VISIBLE
             }
         }
     }
@@ -86,18 +99,20 @@ class PaymentFragment : Fragment(), MainScreenActivity.BackPressedListener {
             false
         }
     }
-
 }
 
 
-class PaymentViewModel(_context: Context): ViewModel() {
-    val context = _context
+class PaymentViewModel(val context: Context): ViewModel() {
+
+    private val order = MutableLiveData<Order>()
+    private val record = MutableLiveData<Uri>(Uri.parse(""))
 
     private val clearShoppingCard = ClearShoppingCard()
     private val postOrderRepository = PostOrderRepository()
+    private val postOrderRecordRepository = PostOrderRecordRepository()
     private val getOrder = GetOrder()
 
-    val result = MutableLiveData<Boolean>()
+    val stateOrder = MutableLiveData<Boolean>()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -106,28 +121,45 @@ class PaymentViewModel(_context: Context): ViewModel() {
         coroutineScope.launch {
             clearShoppingCard.request(context)
         }
-
     }
 
-    private fun getOrder(): Order{
+    private fun getOrder(){
         val body = getOrder.request(context)
         val gson = Gson()
 
         val type = object: TypeToken<Order>(){}.type
-        return gson.fromJson<Order>(body, type)
+        order.value = gson.fromJson(body, type)
     }
 
     fun postOrder(){
+            val data = postOrderRepository.request(order.value!!, GetToken().request(context)?:"")
+            if (data!=null){
+                val gson = Gson()
+                val type = object : TypeToken<Order>(){}.type
+                val gettingOrder: Order? = gson.fromJson(data, type)
+                order.postValue(gettingOrder)
+                stateOrder.postValue(postOrderRecordRepository.request(File(record.value?.path?:""),gettingOrder?.id?:""))
+            }else{
+                stateOrder.postValue(false)
+            }
+    }
+
+    fun getOrderRecord(){
+            record.value = (Uri.parse(GetOrderRecord().request(context) ?: ""))
+    }
+
+    fun setting() {
+        getOrder()
+        getOrderRecord()
         coroutineScope.launch {
-            result.postValue(postOrderRepository.request(getOrder()))
+            postOrder()
         }
     }
 }
 
-class PaymentViewModelFabric(_context: Context): ViewModelProvider.Factory{
-    val context = _context
+class PaymentViewModelFabric(val context: Context): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PaymentViewModel(_context = context) as T
+        return PaymentViewModel(context) as T
     }
 
 

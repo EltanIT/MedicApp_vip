@@ -16,63 +16,55 @@ import com.example.medicapp_vip.R
 import com.example.medicapp_vip.databinding.FragmentShowAnalysisDataBinding
 import com.example.medicapp_vip.db.repositoryLocal.AddItemInShoppingCard
 import com.example.medicapp_vip.objects.Analysis
+import com.example.medicapp_vip.view.AnalysisDataListener
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShowAnalysisDataFragment : Fragment() {
+class ShowAnalysisDataFragment(val listener: AnalysisDataListener) : Fragment() {
 
     private lateinit var binding: FragmentShowAnalysisDataBinding
 
     private lateinit var vm: ShowAnalysisDataViewModel
-
-    private lateinit var analysis: Analysis
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentShowAnalysisDataBinding.inflate(layoutInflater)
-        vm = ViewModelProvider(this, ShowAnalysisDataViewModelFabric(requireContext()))[ShowAnalysisDataViewModel::class.java]
+        vm = ViewModelProvider(this, ShowAnalysisDataViewModelFabric(requireContext(), listener))[ShowAnalysisDataViewModel::class.java]
         subscriptions()
-        bundle()
         setting()
+        vm.getBundle(arguments)
         return binding.root
     }
 
 
     private fun subscriptions() {
-        vm.result.observe(viewLifecycleOwner){
-            binding.addButton.isSelected = it
-        }
-
-    }
-
-    private fun bundle() {
-        val bundle = arguments
-        if (bundle!= null){
-            val gson = Gson()
-            analysis = gson.fromJson(bundle.getString("analysis", null), Analysis::class.java)
-            val state = bundle.getBoolean("state")
-            binding.addButton.isSelected = state
-            if (state){
-                binding.addButton.setTextColor(resources.getColor(R.color.accent))
-            }
-            else{
-                binding.addButton.setTextColor(resources.getColor(R.color.white))
-            }
-
-            if (analysis!= null){
-                binding.addButton.text = "Добавить за ${analysis.price} ₽"
-                binding.name.text = analysis.title
-                binding.description.text = analysis.description
-                binding.description2.text = analysis.processDescription
-                binding.material.text = analysis.material
-                binding.dayCount.text = analysis.deadline
+        vm.state.observe(viewLifecycleOwner){
+            if (it!=null){
+                binding.addButton.isSelected = it
+                if (it){
+                    binding.addButton.setTextColor(resources.getColor(R.color.accent))
+                }else{
+                    binding.addButton.setTextColor(resources.getColor(R.color.white))
+                }
             }
         }
+
+        vm.analysis.observe(viewLifecycleOwner){
+            if (it!=null){
+                binding.addButton.text = "Добавить за ${it.price} ₽"
+                binding.name.text = it.title
+                binding.description.text = it.description
+                binding.description2.text = it.processDescription
+                binding.material.text = it.material
+                binding.dayCount.text = it.deadline
+            }
+        }
+
     }
 
     private fun setting() {
@@ -84,14 +76,9 @@ class ShowAnalysisDataFragment : Fragment() {
         }
 
         binding.addButton.setOnClickListener{
-            if (!binding.addButton.isSelected){
-                vm.addItemInShoppingCard(analysis)
-            }
-            else{
-                vm.deleteItemFromShoppingCard(analysis)
-            }
-
+            vm.redactShoppingCard()
         }
+        binding.cardView.setOnClickListener {}
     }
 
     override fun onResume() {
@@ -122,32 +109,36 @@ class ShowAnalysisDataFragment : Fragment() {
     }
 }
 
-class ShowAnalysisDataViewModel(_context: Context): ViewModel() {
-    val context = _context
+class ShowAnalysisDataViewModel(val context: Context, val listener: AnalysisDataListener): ViewModel() {
 
-    val result = MutableLiveData<Boolean>()
+    val state = MutableLiveData<Boolean>()
+    val analysis = MutableLiveData(Analysis())
 
-    private val addItemInShoppingCard = AddItemInShoppingCard()
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-
-    fun addItemInShoppingCard(analysis: Analysis){
-        coroutineScope.launch {
-            result.postValue(addItemInShoppingCard.request(context = context, analysis))
+    fun getBundle(bundle: Bundle?){
+        if (bundle!= null){
+            val gson = Gson()
+            val type = object: TypeToken<Analysis>() {}.type
+            analysis.value = gson.fromJson(bundle.getString("analysis", null), type)
+            state.value = bundle.getBoolean("state", false)
         }
     }
-    fun deleteItemFromShoppingCard(analysis: Analysis){
-        coroutineScope.launch {
-            result.postValue(addItemInShoppingCard.request(context = context, analysis))
+
+    fun redactShoppingCard() {
+        if (state.value!=null){
+            if (state.value == true){
+                listener.delete(analysis.value!!)
+            }else{
+                listener.add(analysis.value!!)
+            }
+            state.value = !state.value!!
         }
+
     }
 }
 
-class ShowAnalysisDataViewModelFabric(_context: Context): ViewModelProvider.Factory{
-    val context = _context
+class ShowAnalysisDataViewModelFabric(val context: Context, val listener: AnalysisDataListener): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ShowAnalysisDataViewModel(_context = context) as T
+        return ShowAnalysisDataViewModel(context, listener) as T
     }
 
 

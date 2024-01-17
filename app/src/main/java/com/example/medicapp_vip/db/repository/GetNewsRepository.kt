@@ -11,13 +11,13 @@ import java.lang.Exception
 class GetNewsRepository {
 
     private val url = URLs().getNewsUrl
-    private val mediaType = "application/json; charset=utf-8".toMediaType()
 
     fun request(): String?{
         val client = OkHttpClient()
 
         val request = Request.Builder()
             .url(url)
+            .get()
             .build()
 
         try {
@@ -30,6 +30,5 @@ class GetNewsRepository {
             return null
         }
         return null
-
     }
 }

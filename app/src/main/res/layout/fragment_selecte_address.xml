@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,43 +9,48 @@
     android:background="@color/black_50"
     >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/address_card_view"
             android:background="@drawable/view_card_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+
             >
-            <ImageButton
-                android:id="@+id/close_address_view"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/map_ic"
-                android:background="@color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="20dp"
-                />
-
-            <TextView
-                android:id="@+id/text1_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/close_address_view"
-                android:layout_marginEnd="32dp"
-
-                android:text="Адрес сдачи анализов"
-                android:maxLines="3"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="16dp"
-                />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/text1_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/close_address_view"
+                    android:layout_marginEnd="32dp"
+                    android:text="Адрес сдачи анализов"
+                    android:maxLines="3"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    />
+                <ImageButton
+                    android:id="@+id/close_address_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/map_ic"
+                    android:background="@color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/address_ll_view"
@@ -55,11 +60,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text1_view"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-
+                android:layout_marginTop="8dp"
                 >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,18 +77,19 @@
                     android:textColor="@color/black"
                     android:background="@drawable/et_style_default"
                     android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColorHint="#FF939396"
 
                     />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/group1_ll"
                 android:orientation="horizontal"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_ll_view"
-                android:layout_marginHorizontal="16dp"
                 >
                 <LinearLayout
                     android:id="@+id/longitude_ll"
@@ -98,7 +101,6 @@
                     app:layout_constraintTop_toBottomOf="@id/text1_view"
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
-
                     >
 
                     <TextView
@@ -112,12 +114,11 @@
                         android:id="@+id/longitude_et"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
-                        android:hint=""
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:padding="12dp"
                         android:inputType="number"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -149,9 +150,9 @@
                         android:hint=""
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:padding="12dp"
                         android:inputType="number"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -176,9 +177,9 @@
                         android:layout_height="55dp"
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:inputType="number"
                         android:padding="12dp"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -186,12 +187,11 @@
             <LinearLayout
                 android:id="@+id/group2_ll"
                 android:orientation="horizontal"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/group1_ll"
-                android:layout_marginHorizontal="16dp"
                 >
                 <LinearLayout
                     android:id="@+id/flat_ll"
@@ -220,9 +220,9 @@
                         android:hint=""
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:padding="12dp"
                         android:inputType="number"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -254,9 +254,9 @@
                         android:hint=""
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:padding="12dp"
                         android:inputType="number"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -283,9 +283,9 @@
                         android:hint=""
                         android:textColor="@color/black"
                         android:background="@drawable/et_style_default"
-                        android:backgroundTint="@color/Input_Stroke"
                         android:padding="12dp"
                         android:inputType="number"
+                        android:textSize="15sp"
 
                         />
                 </LinearLayout>
@@ -299,7 +299,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/group2_ll"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
 
                 >
@@ -317,40 +316,42 @@
                     android:layout_height="55dp"
                     android:textColor="@color/black"
                     android:background="@drawable/et_style_default"
-                    android:backgroundTint="@color/Input_Stroke"
                     android:padding="12dp"
                     android:inputType="number"
+                    android:textSize="15sp"
+
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Сохранить этот адрес?"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+
+                    />
+                <Switch
+                    android:id="@+id/save_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/intercom_ll_view"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:track="@drawable/switch_track_style"
+                    android:thumb="@drawable/switch_thumb_style"
 
                     />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Сохранить этот адрес?"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="8dp"
-                android:textStyle="bold"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/intercom_ll_view"
-                android:layout_marginStart="16dp"
-
-                />
-            <Switch
-                android:id="@+id/save_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/intercom_ll_view"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:theme="@style/SaveAddressSwitch"
-                android:scaleY="1.5"
-
-                />
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/place_live_et"
                 android:layout_width="match_parent"
@@ -368,16 +369,31 @@
                 android:visibility="gone"
 
                 />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/building_type_et"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:textColor="@color/black"
+                android:background="@drawable/et_style_default"
+                android:padding="12dp"
+                android:hint="Название: например дом, работа"
+                android:textSize="15sp"
+                android:lineHeight="20sp"
+                android:layout_marginTop="16dp"
+                android:textColorHint="#FF939396"
+                android:visibility="gone"
+
+                />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/address_continue_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/btn_selector_style"
-                android:text="Продолжить"
+                android:text="Подтвердить"
                 android:textSize="17sp"
                 android:textColor="@color/white"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/place_live_et"
@@ -387,6 +403,6 @@
                 android:textAllCaps="false"
                 />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

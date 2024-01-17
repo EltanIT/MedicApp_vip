@@ -30,9 +30,15 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this)[LoginViewModel::class.java]
+        subscriptions()
+        setting()
+        return binding.root
+    }
 
+    private fun subscriptions() {
         vm.result.observe(viewLifecycleOwner) {
-            if (it){
+            if (it == true){
+                vm.resetState()
                 val bundle = Bundle()
                 bundle.putString("email", binding.email.text.toString())
                 val ieFragment = IdentificationEmailFragment()
@@ -43,9 +49,11 @@ class LoginFragment : Fragment() {
                     .addToBackStack("identificationEmail")
                     .commit()
             }
-            else{
+            else if(it == false){
                 Toast.makeText(context, "Ошибка, попробуйте позже", Toast.LENGTH_SHORT).show()
+                binding.continueBtn.isEnabled = true
                 /////
+                vm.resetState()
                 val bundle = Bundle()
                 bundle.putString("email", binding.email.text.toString())
                 val ieFragment = IdentificationEmailFragment()
@@ -58,8 +66,6 @@ class LoginFragment : Fragment() {
                 //////
             }
         }
-        setting()
-        return binding.root
     }
 
     private fun setting() {
@@ -78,6 +84,7 @@ class LoginFragment : Fragment() {
         })
 
         binding.continueBtn.setOnClickListener{
+            binding.continueBtn.isEnabled = false
             vm.postEmail(binding.email.text.toString())
         }
     }
@@ -86,14 +93,13 @@ class LoginFragment : Fragment() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-
 }
 
 class LoginViewModel: ViewModel(){
 
     private val postEmailRepository = PostEmailRepository()
 
-    val result = MutableLiveData<Boolean>()
+    val result = MutableLiveData<Boolean?>(null)
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -102,5 +108,9 @@ class LoginViewModel: ViewModel(){
             result.postValue(postEmailRepository.request(email))
         }
 
+    }
+
+    fun resetState() {
+        result.value = null
     }
 }

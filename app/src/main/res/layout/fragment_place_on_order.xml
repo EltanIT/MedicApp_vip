@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.PlaceOnOrderFragment"
     android:background="@color/white"
+    android:scrollbars="none"
+    android:overScrollMode="never"
     >
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -160,9 +149,9 @@
                 android:overScrollMode="never"
                 tools:listitem="@layout/view_selected_patients"
                 tools:itemCount="3"
+                app:reverseLayout="true"
+                app:stackFromEnd="true"
                 />
-
-
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/add_patient_button"
@@ -179,8 +168,8 @@
                 app:layout_constraintTop_toBottomOf="@id/selected_patient_list"
                 style="?android:attr/borderlessButtonStyle"
                 android:textAllCaps="false"
-                />
 
+                />
 
             <LinearLayout
                 android:id="@+id/phone_ll"
@@ -270,7 +259,9 @@
                 <RelativeLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    >
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -278,7 +269,7 @@
                         android:text="Комментарий"
                         android:textColor="@color/Caption" />
                     <ImageView
-                        android:id="@+id/mic_true"
+                        android:id="@+id/redord"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/microphone_ic"
@@ -369,29 +360,50 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/another_view_ll">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    >
 
                     <TextView
                         android:id="@+id/count_analysis_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1 анализ"
+                        android:text="1"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/analysis_count_declantion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" анализ"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        />
 
                     <TextView
                         android:id="@+id/price_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="690 ₽"
+                        android:text="690"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
-                </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text=" ₽"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/continue_place_order_button"
@@ -411,6 +423,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
-
-</FrameLayout>
+</ScrollView>

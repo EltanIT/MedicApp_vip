@@ -7,16 +7,22 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 class GetAnalysisRepository {
 
     private val url = URLs().getAnalysisUrl
 
     fun request(): String?{
-        val client = OkHttpClient()
+        val client = OkHttpClient().newBuilder()
+            .readTimeout(3, TimeUnit.SECONDS)
+            .writeTimeout(3, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .build()
 
         val request = Request.Builder()
             .url(url)
+            .get()
             .build()
 
         try {

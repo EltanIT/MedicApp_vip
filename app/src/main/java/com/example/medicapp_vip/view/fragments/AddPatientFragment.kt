@@ -22,7 +22,7 @@ class AddPatientFragment(val listener: PlaceOnOrderFragment.AddPatientListener) 
 
     private lateinit var addPatientListener: PlaceOnOrderFragment.AddPatientListener
 
-    private lateinit var selectProfile: Profile
+    private lateinit var selectedProfile: Profile
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +38,7 @@ class AddPatientFragment(val listener: PlaceOnOrderFragment.AddPatientListener) 
     private fun listeners() {
         addPatientListener = object: PlaceOnOrderFragment.AddPatientListener {
             override fun execute(profile: Profile) {
-                selectProfile = profile
+                selectedProfile = profile
                 binding.profileContinueButton.isEnabled = true
             }
 
@@ -54,7 +54,7 @@ class AddPatientFragment(val listener: PlaceOnOrderFragment.AddPatientListener) 
             closeView()
         }
         binding.profileContinueButton.setOnClickListener {
-            listener.execute(profile = selectProfile)
+            listener.execute(profile = selectedProfile)
             closeView()
         }
 

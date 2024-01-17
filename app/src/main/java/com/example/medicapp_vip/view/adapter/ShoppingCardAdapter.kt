@@ -41,15 +41,16 @@ class ShoppingCardAdapter(val cardList: ArrayList<Analysis>, val listeners: Shop
 
         }
         holder.binding.removePatientButton.setOnClickListener{
-            listeners.clickRemove(analysis)
             var countNow = holder.binding.countPatient.text.toString().toInt()
+            if (countNow != 1){
+                countNow -= 1
+                holder.binding.countPatient.text = countNow.toString()
+                listeners.clickRemove(analysis)
+            }
 
-            countNow -= 1
-
-            holder.binding.countPatient.text = countNow.toString()
         }
         holder.binding.deleteItem.setOnClickListener{
-//            deleteItem(holder.adapterPosition)
+            deleteItem(holder.adapterPosition)
             listeners.clickDeleteItem(analysis)
         }
 

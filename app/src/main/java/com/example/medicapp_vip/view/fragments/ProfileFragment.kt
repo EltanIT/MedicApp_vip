@@ -4,16 +4,22 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.medicapp_vip.R
+import com.example.medicapp_vip.config.Lists
 import com.example.medicapp_vip.databinding.FragmentProfileBinding
 import com.example.medicapp_vip.db.repository.GetProfileIconRepository
 import com.example.medicapp_vip.db.repository.GetProfileRepository
@@ -35,13 +41,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
+import java.net.URI
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var vm: ProfileViewModel
 
-    private val GALLERY_CONST = 300
+    private val GALLERY_CONST = 100
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,13 +58,10 @@ class ProfileFragment : Fragment() {
         vm = ViewModelProvider(this, ProfileViewModelFabric(requireContext()))[ProfileViewModel::class.java]
         setting()
         subscriptions()
-
         return binding.root
     }
 
     override fun onResume() {
-        vm.getToken()
-        vm.getIconName()
         vm.getProfile()
         super.onResume()
     }
@@ -70,40 +74,57 @@ class ProfileFragment : Fragment() {
         }
 
         binding.save.setOnClickListener {
-            vm.saveProfile(
-                binding.etName.text.toString(),
-                binding.etLastname.text.toString(),
-                binding.etMiddlename.text.toString(),
-                binding.etBirthday.text.toString(),
-                binding.floorS.selectedItemPosition)
+            vm.saveProfile()
         }
 
-        val genders = ArrayList<String>()
-        genders.add("Пол")
-        genders.add("Мужской")
-        genders.add("Женский")
+        binding.etName.addTextChangedListener {
+            vm.redactFirstName(it.toString())
+        }
+        binding.etMiddlename.addTextChangedListener {
+            vm.redactMiddlename(it.toString())
+        }
+        binding.etLastname.addTextChangedListener {
+            vm.redactLastname(it.toString())
+        }
+        binding.etBirthday.addTextChangedListener {
+            vm.redactDob(it.toString())
+        }
+        binding.floorS.onItemSelectedListener = object : OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                vm.redactFloor(p2)
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        }
 
-        binding.floorS.adapter = ArrayAdapter(requireContext(), androidx.constraintlayout.widget.R.layout.support_simple_spinner_dropdown_item, genders)
+        binding.floorS.adapter = ArrayAdapter(requireContext(), androidx.constraintlayout.widget.R.layout.support_simple_spinner_dropdown_item, Lists().genderList)
 
     }
 
     private fun subscriptions() {
         vm.profile.observe(viewLifecycleOwner){
-            binding.etName.setText(it.firstName)
-            binding.etLastname.setText(it.lastName)
-            binding.etMiddlename.setText(it.patronymic)
-            binding.etBirthday.setText(it.dob)
-            it.gender?.let { it1 -> binding.floorS.setSelection(it1) }
+            if (it!=null){
+                binding.etName.setText(it.firstName)
+                binding.etLastname.setText(it.lastName)
+                binding.etMiddlename.setText(it.patronymic)
+                binding.etBirthday.setText(it.dob)
+                binding.floorS.setSelection(it.gender?.plus(1) ?: 0)
+            }
         }
 
         vm.resultRequest.observe(viewLifecycleOwner){
             if (!it){
                 Toast.makeText(context, "Ошибка подключения", Toast.LENGTH_SHORT).show()
             }
-
         }
+
         vm.icon.observe(viewLifecycleOwner){
-            binding.icon.setImageURI(it)
+            if (it!=null){
+//                val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, it)
+                binding.icon.setImageURI(it)
+            }else{
+                Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -112,20 +133,20 @@ class ProfileFragment : Fragment() {
             val uri = data.data
             if (uri != null){
                 vm.saveIcon(uri)
+            }else{
+                Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
             }
+        }else{
+            Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 }
 
-
 class ProfileViewModel(val context: Context): ViewModel() {
 
     val profile = MutableLiveData<Profile>()
     val icon = MutableLiveData<Uri>()
-    private lateinit var file: File
-    private var token: String? = ""
-    private var iconName: String? = ""
 
     val resultRequest = MutableLiveData<Boolean>()
 
@@ -143,56 +164,60 @@ class ProfileViewModel(val context: Context): ViewModel() {
 
     fun getProfile(){
         coroutine.launch {
-           val body = getProfile.request(token!!)
+            val body = getProfile.request(getToken.request(context)?:"")
             if (body != null){
                 val gson = Gson()
                 val type = object : TypeToken<Profile>(){}.type
                 profile.postValue(gson.fromJson(body, type))
             }
         }
+        getIcon()
     }
 
-    fun saveProfile(name: String, lastname: String, patronymic: String, birthday: String, gender: Int){
+    fun saveProfile(){
         coroutine.launch {
-            profile.postValue(Profile(name, lastname, patronymic, birthday, gender))
-            resultRequest.postValue(putProfile.request(profile.value, token!!))
-            postIcon.request(file, token!!)
+            resultRequest.postValue(putProfile.request(profile.value, getToken.request(context)?:""))
+            postIcon.request(File(icon.value?.path?:""), getToken.request(context)?:"")
         }
-    }
-
-    fun getToken(){
-        token = getToken.request(context)
     }
 
     fun saveIcon(data: Uri){
         coroutine.launch {
             icon.postValue(data)
-            file = File(data.path)
-            iconName = file.name
-            saveIconName()
+            Log.i("profile", data.toString())
+            val file = File(data.path)
+            saveIconName(file.name)
         }
-
     }
     fun getIcon(){
         coroutine.launch {
-            if (iconName!= null){
-                val body = getIcon.request(iconName!!)
-            }
+            val body = getIcon.request(getIconName.request(context)?:"")
         }
     }
 
-    fun getIconName(){
+    fun saveIconName(name: String){
         coroutine.launch {
-            iconName = getIconName.request(context)
+            saveIconName.request(context, name)
         }
     }
 
-    fun saveIconName(){
-        coroutine.launch {
-            saveIconName.request(context, iconName.toString())
+    fun redactFirstName(text: String) {
+        profile.value?.firstName = text
+    }
+    fun redactFloor(gender: Int) {
+        if (gender>0){
+            profile.value?.gender = gender-1
         }
     }
-
+    fun redactMiddlename(toString: String) {
+        profile.value?.patronymic = toString
+    }
+    fun redactLastname(toString: String) {
+        profile.value?.lastName = toString
+    }
+    fun redactDob(toString: String) {
+        profile.value?.dob = toString
+    }
 }
 
 class ProfileViewModelFabric(_context: Context): ViewModelProvider.Factory{

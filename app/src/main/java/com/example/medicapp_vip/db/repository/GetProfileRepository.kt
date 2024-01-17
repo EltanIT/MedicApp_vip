@@ -1,22 +1,18 @@
 package com.example.medicapp_vip.db.repository
 
 import com.example.medicapp_vip.config.URLs
-import com.google.gson.Gson
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.lang.Exception
 
 class GetProfileRepository {
 
     private val url = URLs().getProfileUrl
-
     fun request(token: String): String?{
         val client = OkHttpClient()
 
         val request = Request.Builder()
             .url(url)
+            .get()
             .header("Authorization", token)
             .build()
 
@@ -30,6 +26,5 @@ class GetProfileRepository {
             return null
         }
         return null
-
     }
 }

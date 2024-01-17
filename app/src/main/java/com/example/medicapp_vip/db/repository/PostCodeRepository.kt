@@ -8,6 +8,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.lang.Exception
 import java.util.concurrent.Executor
+import java.util.concurrent.TimeUnit
 
 class PostCodeRepository {
 
@@ -15,7 +16,11 @@ class PostCodeRepository {
     private val mediaType = "application/json; charset=utf-8".toMediaType()
 
     fun request(email: String, code: String): String?{
-        val client = OkHttpClient()
+        val client = OkHttpClient().newBuilder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.SECONDS)
+            .build()
         val gson = Gson()
 
         val dataMap = mapOf<String, String>("email" to email,

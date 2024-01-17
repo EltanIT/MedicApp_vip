@@ -3,6 +3,7 @@ package com.example.medicapp_vip.view.fragments
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Calendar
+import java.util.Date
 
 class SelectedDateFragment(val listener: PlaceOnOrderFragment.DateListener) : Fragment() {
 
@@ -200,26 +202,41 @@ class SelectedDateFragment(val listener: PlaceOnOrderFragment.DateListener) : Fr
             } else {
                 TODO("VERSION.SDK_INT < O")
             }
+            val date = Date()
             if (binding.time10.isSelected) {
                 ldt = LocalDateTime.now().withHour(10).withMinute(0)
+                date.hours = 10
+                date.minutes = 0
             } else if (binding.time13.isSelected) {
                 ldt = LocalDateTime.now().withHour(13).withMinute(0)
+                date.hours = 13
+                date.minutes = 0
             } else if (binding.time14.isSelected) {
                 ldt = LocalDateTime.now().withHour(14).withMinute(0)
+                date.hours = 14
+                date.minutes = 5
             } else if (binding.time15.isSelected) {
                 ldt = LocalDateTime.now().withHour(15).withMinute(0)
+                date.hours = 15
+                date.minutes = 0
             } else if (binding.time16.isSelected) {
                 ldt = LocalDateTime.now().withHour(16).withMinute(0)
+                date.hours = 16
+                date.minutes = 0
             } else if (binding.time18.isSelected) {
                 ldt = LocalDateTime.now().withHour(18).withMinute(0)
+                date.hours = 18
+                date.minutes = 0
             } else if (binding.time19.isSelected) {
                 ldt = LocalDateTime.now().withHour(19).withMinute(0)
+                date.hours = 19
+                date.minutes = 0
             }
 
             if (day == 1){
-                ldt.dayOfMonth+1
+                date.day.plus(1)
             }
-            val date = "${ldt.year}-${ldt.month}-${ldt.dayOfMonth}T${ldt.hour}:${ldt.minute}:${ldt.second}.0192"
+            Log.i("date", date.toString())
             listener.execute(ldt)
             closeView()
         }
